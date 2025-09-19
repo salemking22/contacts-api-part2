@@ -8,6 +8,8 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+console.log('🔍 MongoDB URI:', process.env.MONGODB_URI);
+
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('✅ Connected to MongoDB Atlas'))
