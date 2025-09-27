@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const [swaggerServe, swaggerSetup] = require('./swagger');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,6 +24,9 @@ app.use('/contacts', contactsRouter);
 app.get('/', (req, res) => {
     res.send('🚀 Contacts API is running');
 });
+
+// Swagger route
+app.use('/api-docs', swaggerServe, swaggerSetup);
 
 // Start server
 app.listen(port, () => {

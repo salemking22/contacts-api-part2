@@ -2,7 +2,46 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('../models/contact');
 
-// GET all contacts
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Contact:
+ *       type: object
+ *       required:
+ *         - firstName
+ *         - lastName
+ *         - email
+ *         - favoriteColor
+ *         - birthday
+ *       properties:
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *         favoriteColor:
+ *           type: string
+ *         birthday:
+ *           type: string
+ */
+
+/**
+ * @swagger
+ * /contacts:
+ *   get:
+ *     summary: Get all contacts
+ *     responses:
+ *       200:
+ *         description: List of contacts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Contact'
+ */
 router.get('/', async (req, res) => {
     try {
         const contacts = await Contact.find();
@@ -12,7 +51,27 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET contact by ID
+/**
+ * @swagger
+ * /contacts/{id}:
+ *   get:
+ *     summary: Get a contact by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Contact found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Contact'
+ *       404:
+ *         description: Contact not found
+ */
 router.get('/:id', async (req, res) => {
     try {
         const contact = await Contact.findById(req.params.id);
@@ -23,7 +82,21 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST new contact
+/**
+ * @swagger
+ * /contacts:
+ *   post:
+ *     summary: Create a new contact
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       201:
+ *         description: Contact created
+ */
 router.post('/', async (req, res) => {
     const contact = new Contact({
         firstName: req.body.firstName,
@@ -41,7 +114,29 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT update contact
+/**
+ * @swagger
+ * /contacts/{id}:
+ *   put:
+ *     summary: Update a contact by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Contact'
+ *     responses:
+ *       200:
+ *         description: Contact updated
+ *       404:
+ *         description: Contact not found
+ */
 router.put('/:id', async (req, res) => {
     try {
         const updatedContact = await Contact.findByIdAndUpdate(
@@ -56,7 +151,23 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// DELETE contact
+/**
+ * @swagger
+ * /contacts/{id}:
+ *   delete:
+ *     summary: Delete a contact by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Contact deleted
+ *       404:
+ *         description: Contact not found
+ */
 router.delete('/:id', async (req, res) => {
     try {
         const deletedContact = await Contact.findByIdAndDelete(req.params.id);
